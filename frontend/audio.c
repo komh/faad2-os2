@@ -71,7 +71,7 @@ audio_file *open_audio_file(char *infile, int samplerate, int channels,
 
     if(infile[0] == '-')
     {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__OS2__)
         setmode(fileno(stdout), O_BINARY);
 #endif
         aufile->sndfile = stdout;

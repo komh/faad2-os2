@@ -949,7 +949,7 @@ static int decodeMP4file(char *mp4file, char *sndfile, char *adts_fn, int to_std
                     aufile = open_audio_file(sndfile, frameInfo.samplerate, frameInfo.channels,
                         outputFormat, fileType, aacChannelConfig2wavexChannelMask(&frameInfo));
                 } else {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__OS2__)
                     setmode(fileno(stdout), O_BINARY);
 #endif
                     aufile = open_audio_file("-", frameInfo.samplerate, frameInfo.channels,
