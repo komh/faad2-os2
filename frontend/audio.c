@@ -31,6 +31,13 @@
 #ifdef _WIN32
 #include <io.h>
 #endif
+#ifdef __OS2__
+#include <io.h>
+#include <fcntl.h>
+
+#define _setmode(h, m) setmode(h, m)
+#define _fileno(s) fileno(s)
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -74,7 +81,7 @@ audio_file *open_audio_file(char *infile, int samplerate, int channels,
 
     if(infile[0] == '-')
     {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__OS2__)
         _setmode(_fileno(stdout), O_BINARY);
 #endif
         aufile->sndfile = stdout;

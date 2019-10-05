@@ -43,6 +43,14 @@
 #include <time.h>
 #endif
 
+#ifdef __OS2__
+#include <io.h>
+#include <fcntl.h>
+
+#define _setmode(h, m) setmode(h, m)
+#define _fileno(s) fileno(s)
+#endif
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -498,7 +506,7 @@ static int decodeAACfile(char *aacfile, char *sndfile, char *adts_fn, int to_std
     if (0 == strcmp(aacfile, "-"))
     {
 	b.infile = stdin;
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__OS2__)
         _setmode(_fileno(stdin), O_BINARY);
 #endif
 
@@ -960,7 +968,7 @@ static int decodeMP4file(char *mp4file, char *sndfile, char *adts_fn, int to_std
                     aufile = open_audio_file(sndfile, frameInfo.samplerate, frameInfo.channels,
                         outputFormat, fileType, aacChannelConfig2wavexChannelMask(&frameInfo));
                 } else {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__OS2__)
                     _setmode(_fileno(stdout), O_BINARY);
 #endif
                     aufile = open_audio_file("-", frameInfo.samplerate, frameInfo.channels,
@@ -1272,7 +1280,7 @@ static int faad_main(int argc, char *argv[])
    	faad_fprintf(stderr, "Reading from stdin: %s\n", aacFileName);
 	readFromStdin = 1;
 	hMP4File  = stdin;
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__OS2__)
         _setmode(_fileno(stdin), O_BINARY);
 #endif
 
